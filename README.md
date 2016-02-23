@@ -9,19 +9,17 @@ node session and socket
 ```
 
 var sessionStore = new express.session.MemoryStore;
-==>
+==>转换为
 var session = require('express-session');
 var sessionStore = new session.MemoryStore();
 
 ```
 ####看了一下express-session大致实现，大致流程是
 	（1）cookie中没有connect.sid，生成一个connect.sid，为's:' + sessionid + '.' + sessionid.sha256(secret).base64()；
-	（2）cookie中包含connect.sid，取出cookie中的connect.sid，connect.sid.slice(2, connect.sid.indexOf(’.’))截取出sessionid,
-再计算sessionid.sha256(secret).base64()，进行对比，通过则继续往下
+	（2）cookie中包含connect.sid，取出cookie中的connect.sid，connect.sid.slice(2,connect.sid.indexOf(’.’))截取出sessionid,再计算sessionid.sha256(secret).base64()，进行对比，通过则继续往下
 
 
-####然后是socket.use(fn)部分，之前是使用socket.set('authorization', callback)，现在是中间件的形式。其中app.use(cookieParser())不能解析socket
-	的cookie，所以还需要重新定义。
+####然后是socket.use(fn)部分，之前是使用socket.set('authorization', callback)，现在是中间件的形式。其中app.use(cookieParser())不能解析socket的cookie，所以还需要重新定义。
 
 ####网上没有找到合适的资料，看源码了解了其使用方法
 
